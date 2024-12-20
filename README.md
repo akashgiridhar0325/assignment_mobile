@@ -74,18 +74,23 @@ src/
 
 ## Relevant Screenshots
 1. Login Screen
+
 ![alt text](<Screenshot 2024-12-20 095115.png>)
 
 2. Sign Up Screen
+
 ![alt text](<Screenshot 2024-12-20 095021.png>)
 
 3. Home Screen
+
 ![alt text](<Screenshot 2024-12-20 095139.png>)
 
 4. Profile Screen
+
 ![alt text](<Screenshot 2024-12-20 095149.png>)
 
 5. Notifications Screen
+
 ![alt text](<Screenshot 2024-12-20 095200.png>)
 
 If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
