@@ -1,6 +1,6 @@
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-# Day 2 Assignment
+# Mobile App assignment
 
 ## Problem Statement
 Create a mobile application with login, signup, and profile functionality, offering seamless navigation and a visually appealing user interface.
