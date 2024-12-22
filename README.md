@@ -9,7 +9,7 @@ Create a mobile application with login, signup, and profile functionality, offer
 - **Login Screen:** User authentication with username and password.
 - **Signup Screen:** New user registration with a back-to-login option.
 - **Forgot Password Screen:** Prompt for password recovery with navigation back to login.
-- **Navigation Bar:** To navigate between 3 pages, Home, User and
+- **Navigation Bar:** To navigate between 3 pages, Home, User, and Notifications.
 
 ## Approach
 1. Implemented navigation using React Navigation to manage screens.
@@ -52,46 +52,49 @@ Create a mobile application with login, signup, and profile functionality, offer
 
 ## Usage
 1. Launch the app on your emulator or connected device.
-2. Navigate through login, signup, and profile screens. (Sign up functionality is purely UI currently. Future work for the same includes connecting it to a backend to actually have the functionality instead of just having it as a visual but non working element)
-3. Use the "Forgot Password" option if needed. (Same like signup, needs to be worked further worked upon)
+2. Navigate through login, signup, and profile screens.
+3. Use the "Forgot Password" option if needed.
 4. Logout from the profile screen to return to login.
 
 ## Project Structure
 ```
-src/
+project_directory/
 |-- screens/
 |   |-- LoginScreen.tsx
 |   |-- SignupScreen.tsx
 |   |-- ForgotPasswordScreen.tsx
-|   |-- ProfileScreen.tsx
-|   |-- NotificationsScreen.tsx
-|   |-- HomeScreen.tsx
+|   |-- DynamicScreen.tsx
 |   |-- MainTabs.tsx
 |-- styles/
 |   |-- commonStyles.ts
 |-- App.tsx
+|-- Navigation.tsx
 ```
 
 ## Relevant Screenshots
 1. Login Screen
 
-![alt text](<Screenshot 2024-12-20 095115.png>)
+![alt text](image.png)
 
-2. Sign Up Screen
+2. Sign up
 
-![alt text](<Screenshot 2024-12-20 095021.png>)
+![alt text](image-1.png)
 
-3. Home Screen
+Once you enter the proper credentials, you can successfully sign up
 
-![alt text](<Screenshot 2024-12-20 095139.png>)
+![alt text](image-2.png)
 
-4. Profile Screen
+3. Home page
 
-![alt text](<Screenshot 2024-12-20 095149.png>)
+![alt text](image-3.png)
 
-5. Notifications Screen
+4. Notifications Page
 
-![alt text](<Screenshot 2024-12-20 095200.png>)
+![alt text](image-4.png)
+
+5. Profile Page
+
+![alt text](image-5.png)
 
 If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
 

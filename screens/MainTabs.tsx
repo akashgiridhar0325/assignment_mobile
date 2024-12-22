@@ -1,10 +1,14 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from './HomeScreen';
-import ProfileScreen from './ProfileScreen';
-import NotificationScreen from './NotificationsScreen';
-import { View, Text } from 'react-native';
+import DynamicScreen from './DynamicScreen';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
+// Define the RootTabParamList to include all your screens
+type RootTabParamList = {
+  Home: undefined;
+  Profile: undefined;
+  Notifications: undefined;
+};
 
 const Tab = createBottomTabNavigator();
 
@@ -13,26 +17,26 @@ const MainTabs: React.FC = () => {
     <Tab.Navigator
       screenOptions={{
         tabBarStyle: { backgroundColor: '#fff', borderTopWidth: 0 },
-        headerShown: false,
+        headerShown: true, // Enable header globally for tab screens
       }}
     >
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={DynamicScreen}
         options={{
           tabBarIcon: ({ color, size }) => <Icon name="home" size={size} color={color} />,
         }}
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={DynamicScreen}
         options={{
           tabBarIcon: ({ color, size }) => <Icon name="person" size={size} color={color} />,
         }}
       />
       <Tab.Screen
         name="Notifications"
-        component={NotificationScreen}
+        component={DynamicScreen}
         options={{
           tabBarIcon: ({ color, size }) => <Icon name="notifications" size={size} color={color} />,
         }}

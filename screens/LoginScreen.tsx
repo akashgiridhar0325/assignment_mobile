@@ -15,7 +15,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
   const handleLogin = () => {
     if (username === 'admin' && password === 'password') {
-      navigation.replace('Main'); // Replace with your main screen name
+      navigation.replace('MainTabs'); // This should replace Login with MainTabs (your home page)
     } else {
       Alert.alert('Login Failed', 'Invalid username or password');
     }
