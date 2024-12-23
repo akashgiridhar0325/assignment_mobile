@@ -1,147 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import LinearGradient from 'react-native-linear-gradient';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import LinearGradient from 'react-native-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios'; // Import axios
+import AsyncStorage from '@react-native-async-storage/async-storage'; // For storing JWT token
 import commonStyles from '../styles/commonStyles';
+import { StackNavigationProp } from '@react-navigation/stack'; // Import StackNavigationProp
 
-type SignUpScreenNavigationProp = StackNavigationProp<any, 'SignUp'>;
+// Define types for your navigation
+type RootStackParamList = {
+  Login: undefined;
+  MainTabs: undefined;
+  ForgotPassword: undefined;
+  SignUp: undefined;
+};
 
-interface Props {
-  navigation: SignUpScreenNavigationProp;
-}
+type SignUpScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUp'>;
 
-const SignUpScreen: React.FC<Props> = ({ navigation }) => {
-  const [email, setEmail] = useState('');
+const API_URL = 'http://192.168.158.156:5000/api/auth/signup'; // Backend URL
+
+// Define the SignUpScreen component with navigation prop typed
+const SignUpScreen: React.FC<{ navigation: SignUpScreenNavigationProp }> = ({ navigation }) => {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [isValidEmail, setIsValidEmail] = useState(false);
-  const [passwordStrength, setPasswordStrength] = useState({
-    length: false,
-    uppercase: false,
-    number: false,
-    specialChar: false,
-  });
-  const [isPasswordValid, setIsPasswordValid] = useState(false);
-  const [doPasswordsMatch, setDoPasswordsMatch] = useState(true);
+  const [email, setEmail] = useState('');
 
-  useEffect(() => {
-    // Check password validation
-    const checkPassword = () => {
-      const length = password.length >= 8;
-      const uppercase = /[A-Z]/.test(password);
-      const number = /\d/.test(password);
-      const specialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-      setPasswordStrength({ length, uppercase, number, specialChar });
-      setIsPasswordValid(length && uppercase && number && specialChar);
-    };
+  const handleSignUp = async () => {
+    try {
+      // Send sign-up request to backend
+      const response = await axios.post(`${API_URL}/signup`, {
+        email: email,
+        username: username,
+        password: password,
+      });
+      const { token } = response.data; // Extract JWT token from response
 
-    checkPassword();
-  }, [password]);
+      // Store JWT token in AsyncStorage
+      await AsyncStorage.setItem('userToken', token);
 
-  useEffect(() => {
-    // Check if passwords match
-    setDoPasswordsMatch(password === confirmPassword);
-  }, [confirmPassword, password]);
-
-  const handleSignUp = () => {
-    if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match.');
-    } else {
-      // Handle the sign-up logic here (e.g., send data to the backend)
-      Alert.alert('Success', 'Sign up successful!');
-      navigation.replace('Login'); // Redirect to Login after successful sign-up
+      navigation.replace('MainTabs'); // Navigate to the main screen after successful sign-up
+    } catch (error) {
+      Alert.alert('Sign Up Failed', 'There was an error during sign-up');
     }
-  };
-
-  const handleEmailChange = (email: string) => {
-    setEmail(email);
-    // Basic email validation using a simple regex
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    setIsValidEmail(emailRegex.test(email));
   };
 
   return (
     <LinearGradient colors={['#6a11cb', '#2575fc']} style={commonStyles.container}>
       <View style={styles.card}>
-        <Text style={styles.title}>Create an Account</Text>
-
-        {/* Email Input */}
+        <Text style={styles.title}>Create Account</Text>
+        <View style={styles.inputContainer}>
+          <Icon name="person" size={20} color="#1E88E5" style={styles.icon} />
+          <TextInput
+            style={commonStyles.input}
+            placeholder="Username"
+            value={username}
+            onChangeText={setUsername}
+          />
+        </View>
         <View style={styles.inputContainer}>
           <Icon name="email" size={20} color="#1E88E5" style={styles.icon} />
           <TextInput
             style={commonStyles.input}
             placeholder="Email"
             value={email}
-            onChangeText={handleEmailChange}
+            onChangeText={setEmail}
           />
         </View>
-        {/* Email Validation */}
-        <Text style={[styles.validationText, isValidEmail ? styles.valid : styles.invalid]}>
-          {isValidEmail ? 'Valid Email' : 'Invalid Email Format'}
-        </Text>
-
-        {/* Password Input */}
         <View style={styles.inputContainer}>
           <Icon name="lock" size={20} color="#1E88E5" style={styles.icon} />
           <TextInput
             style={commonStyles.input}
             placeholder="Password"
-            secureTextEntry
             value={password}
+            secureTextEntry
             onChangeText={setPassword}
           />
         </View>
-
-        {/* Password Validation Rules */}
-        <View style={styles.rulesContainer}>
-          <Text style={styles.rulesTitle}>Password Requirements:</Text>
-          <Text style={[styles.rule, passwordStrength.length ? styles.valid : styles.invalid]}>
-            - Minimum 8 characters
-          </Text>
-          <Text style={[styles.rule, passwordStrength.uppercase ? styles.valid : styles.invalid]}>
-            - At least one uppercase letter
-          </Text>
-          <Text style={[styles.rule, passwordStrength.number ? styles.valid : styles.invalid]}>
-            - At least one number
-          </Text>
-          <Text style={[styles.rule, passwordStrength.specialChar ? styles.valid : styles.invalid]}>
-            - At least one special character
-          </Text>
-        </View>
-
-        {/* Confirm Password Input */}
-        <View style={styles.inputContainer}>
-          <Icon name="lock" size={20} color="#1E88E5" style={styles.icon} />
-          <TextInput
-            style={commonStyles.input}
-            placeholder="Confirm Password"
-            secureTextEntry
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-          />
-        </View>
-        {/* Password Match Validation */}
-        <Text style={[styles.validationText, doPasswordsMatch ? styles.valid : styles.invalid]}>
-          {doPasswordsMatch ? 'Passwords match' : 'Passwords do not match'}
-        </Text>
-
-        {/* Sign Up Button */}
-        <TouchableOpacity
-          style={[styles.button, !isValidEmail || !isPasswordValid || !doPasswordsMatch ? styles.disabledButton : {}]}
-          onPress={handleSignUp}
-          disabled={!isValidEmail || !isPasswordValid || !doPasswordsMatch}
-        >
-          <Text style={styles.buttonText}>Sign Up</Text>
+        <TouchableOpacity style={commonStyles.button} onPress={handleSignUp}>
+          <Text style={commonStyles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
 
-        {/* Back to Login Button */}
-        <TouchableOpacity
-          style={[styles.button, styles.backButton]}
-          onPress={() => navigation.replace('Login')}
-        >
-          <Text style={styles.buttonText}>Back to Login</Text>
-        </TouchableOpacity>
+        {/* Link to login */}
+        <View style={styles.linkContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.linkText}>Already have an account? Login</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </LinearGradient>
   );
@@ -149,73 +94,39 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   card: {
-    width: '85%',
-    padding: 20,
     backgroundColor: '#fff',
+    padding: 20,
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
     alignItems: 'center',
+    justifyContent: 'center',
+    width: '80%',
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 20,
   },
   inputContainer: {
-    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 15,
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    width: '100%',
   },
   icon: {
-    position: 'absolute',
-    left: 10,
+    marginRight: 10,
   },
-  rulesContainer: {
+  linkContainer: {
     marginTop: 20,
-    width: '100%',
-    paddingHorizontal: 20,
   },
-  rulesTitle: {
-    fontSize: 16,
-    color: '#333',
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  rule: {
+  linkText: {
+    color: '#2575fc',
+    textDecorationLine: 'underline',
     fontSize: 14,
-    marginBottom: 5,
-  },
-  validationText: {
-    fontSize: 14,
-    marginTop: 5,
-  },
-  valid: {
-    color: 'green',
-  },
-  invalid: {
-    color: 'red',
-  },
-  button: {
-    backgroundColor: '#1E88E5',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 5,
-    marginBottom: 10,
-  },
-  disabledButton: {
-    backgroundColor: '#B0BEC5',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  backButton: {
-    backgroundColor: '#FF3B30', // Red for Back button to differentiate it
   },
 });
 

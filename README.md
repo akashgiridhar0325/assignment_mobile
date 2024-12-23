@@ -6,7 +6,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 Create a mobile application with login, signup, and profile functionality, offering seamless navigation and a visually appealing user interface.
 
 ## Features
-- **Login Screen:** User authentication with username and password.
+- **Login Screen:** User authentication with username and password. Now connected to a database for proper verification
 - **Signup Screen:** New user registration with a back-to-login option.
 - **Forgot Password Screen:** Prompt for password recovery with navigation back to login.
 - **Navigation Bar:** To navigate between 3 pages, Home, User, and Notifications.
@@ -33,6 +33,7 @@ Create a mobile application with login, signup, and profile functionality, offer
   - `@react-navigation/stack`
   - `react-native-linear-gradient`
   - `react-native-vector-icons`
+- Backend to be running. You can find the repo for the same on my github profile under the repo called assignment_backend. Follow the instructions given there and run the backend
 
 ## Installation
 1. Clone the repository:
@@ -69,12 +70,16 @@ project_directory/
 |   |-- commonStyles.ts
 |-- App.tsx
 |-- Navigation.tsx
+|-- api.ts
 ```
 
 ## Relevant Screenshots
 1. Login Screen
 
-![alt text](image.png)
+![alt text](image-6.png)
+
+Example of user present in mongoDB : 
+![alt text](image-7.png)
 
 2. Sign up
 
